@@ -32,47 +32,46 @@ angular.module('app', ['autofill-directive', 'ngRoute'])
           console.log("LENGTH: ", response.routes[0].overview_path.length);
           console.log("OVERVIEW PATH: ", response.routes[0].overview_path);
 
-          var sendData = {
-            distance: response.routes[0].legs[0].distance.text,
-            waypoints: {}
-          };
+          // var sendData = {
+          //   distance: response.routes[0].legs[0].distance.text,
+          //   waypoints: {}
+          // };
 
           //gather all points along route returned by Google in overview_path property
           //and insert them into waypoints object to send to server
-          for (var j = 0; j < response.routes[0].overview_path.length; j++) {
-            sendData.waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
-          }
+          // for (var j = 0; j < response.routes[0].overview_path.length; j++) {
+          //   sendData.waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
+          // }
 
-          console.log("sendData: ", sendData);
+          // console.log("sendData: ", sendData);
           // Send all waypoints along route to server
-          Maps.sendPost(sendData)
-          .then(function(res){
-            console.log("PROMISE OBJ: ", res.data.results);
-            placemarkers(res.data.results);
+          // Maps.sendPost(sendData)
+          // .then(function(res){
+          //   console.log("PROMISE OBJ: ", res.data.results);
             // get back recommendations from Yelp and display as markers
-          })
+          // })
 
-          function placemarkers (places) {
-            for (var i = 0; i < places.length; i++) {
-               setDelay(i, places);
+          function placemarkers () {
+            for (var i = 0; i < response.routes[0].overview_path.length; i++) {
+               setDelay(i);
             }
             // set delay for dropping each marker
-            function setDelay(i, places) {
+            function setDelay(i) {
               setTimeout(function() {
-                var lat = places[i].location.coordinate.latitude;
-                var lng = places[i].location.coordinate.longitude;
-                var description = places[i].name;
+                // var lat = places[i].location.coordinate.latitude;
+                // var lng = places[i].location.coordinate.longitude;
+                // var description = places[i].name;
                 var marker = new google.maps.Marker({
                   map: map,
-                  position: new google.maps.LatLng(lat,lng),
+                  position: response.routes[0].overview_path[i],
                   animation: google.maps.Animation.DROP
                 });
-                attachInstructionText(marker, description);
+                attachInstructionText(marker, 'hello, world');
                 markerArray[i] = marker;
-              }, i * 300);
+              }, i * 100);
             }
           }
-
+          placemarkers();
         } else {
           //Log the status code on error
           console.log("Geocode was not successful: " + status);
