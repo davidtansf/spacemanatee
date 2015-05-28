@@ -73,7 +73,7 @@ angular.module('app', ['autofill-directive', 'ngRoute', 'app.service'])
           //gather all points along route returned by Google in overview_path property
           //and insert them into waypoints object to send to server
           for (var j = 0; j < response.routes[0].overview_path.length; j++) {
-            sendData.waypoints[j] = response.routes[0].overview_path[j].k + "," + response.routes[0].overview_path[j].D;
+            sendData.waypoints[j] = response.routes[0].overview_path[j].lat() + "," + response.routes[0].overview_path[j].lng();
           }
 
           $scope.appendWarningMsg($scope.geoCodeNotSuccessful); // append the blank (no warning) message to main.html
